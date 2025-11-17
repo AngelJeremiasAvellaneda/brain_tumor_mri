@@ -1,0 +1,20 @@
+# --- CORE DATA ---
+numpy
+pandas
+scipy
+matplotlib
+scikit-learn
+Pillow
+
+# --- FLASK BACKEND ---
+Flask
+Flask-CORS
+python-dotenv
+
+# --- MACHINE LEARNING / DEEP LEARNING ---
+tensorflow
+protobuf
+h5py
+
+# --- OPTIONAL UTILITIES ---
+opencv-python
