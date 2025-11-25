@@ -22,8 +22,8 @@ export default function Home() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4 sm:gap-6 justify-center">
-            <Btn link="/tumores" text="Evaluar Tumores" />
-            <Btn link="/pulmones" text="Evaluar Pulmones" secondary />
+            <Btn link="/evaluacion/tumores" text="Evaluar Tumores" />
+            <Btn link="/evaluacion/pulmones" text="Evaluar Pulmones" secondary />
           </div>
         </div>
       </section>

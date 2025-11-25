@@ -10,28 +10,24 @@ venv/
 *.env
 *.venv
 
-# Logs
+# Logs y DB
 *.log
 *.sqlite3
 
-# Editor / IDE
+# IDE / Editor
 .vscode/
 .idea/
 .DS_Store
 
-# Carpeta de modelos y uploads opcional
-# Si quieres subir solo los modelos usados, ignora los demás modelos
-backend/models/*
-!backend/models/lungs_xray_model.h5
-!backend/models/tumor_xray_model_efficientnet.keras
+# Carpeta de modelos y uploads
+backend/models/
 backend/uploads/
 
-# Utils y app.py se suben
-# database y training NO se suben
+# No subir datos de entrenamiento ni base de datos local
 database/
 training/
 
-# Otros
+# Otros temporales
 *.bak
 *.swp
 
@@ -53,7 +49,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Editor / IDE
+# IDE / Editor
 .vscode/*
 !.vscode/extensions.json
 .idea/
