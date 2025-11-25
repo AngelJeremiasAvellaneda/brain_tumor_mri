@@ -35,14 +35,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Carpeta donde se guardarán los modelos descargados
+# Carpeta donde se guardarán los modelos
 MODEL_FOLDER = os.path.join(BASE_DIR, "models")
 os.makedirs(MODEL_FOLDER, exist_ok=True)
 
 # ============================
 # RUTAS
 # ============================
-
 @app.get("/")
 def home():
     return {"message": "API de IA funcionando correctamente ✔"}
@@ -51,7 +50,6 @@ def home():
 @app.post("/predict/tumor")
 async def detect_brain_tumor(image: UploadFile = File(...)):
     try:
-        # Crear un nombre único para la imagen
         unique_filename = f"{uuid.uuid4().hex}_{image.filename}"
         file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
         
@@ -59,7 +57,7 @@ async def detect_brain_tumor(image: UploadFile = File(...)):
         with open(file_path, "wb") as f:
             f.write(await image.read())
 
-        # Predecir usando el modelo (descarga automática si no existe)
+        # Predecir
         result = predict_tumor(file_path)
 
         return {"filename": unique_filename, "result": result}
@@ -88,6 +86,5 @@ async def detect_lungs(image: UploadFile = File(...)):
 # EJECUTAR DIRECTAMENTE CON PYTHON
 # ============================
 if __name__ == "__main__":
-    # Render asigna un puerto automáticamente mediante la variable de entorno PORT
     port = int(os.environ.get("PORT", 5000))
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("backend.app:app", host="0.0.0.0", port=port)

@@ -1,10 +1,11 @@
 import numpy as np
-from tensorflow.keras.preprocessing import image
+from PIL import Image
 
 IMG_SIZE = (224, 224)
 
 def preprocess_image(img_path):
-    """Carga y prepara una imagen para el modelo."""
-    img = image.load_img(img_path, target_size=IMG_SIZE)
-    img_array = image.img_to_array(img) / 255.0
+    """Carga y prepara una imagen para el modelo ONNX."""
+    img = Image.open(img_path).convert("RGB")
+    img = img.resize(IMG_SIZE)
+    img_array = np.array(img).astype("float32") / 255.0
     return np.expand_dims(img_array, axis=0)

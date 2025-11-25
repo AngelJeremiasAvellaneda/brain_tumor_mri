@@ -1,6 +1,6 @@
+from PIL import Image
 import numpy as np
 import onnxruntime as ort
-from tensorflow.keras.preprocessing import image
 import os
 
 # ============================
@@ -9,10 +9,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "../models/tumor_xray_model_efficientnet.onnx")
 
-
 CLASS_NAMES = ["notumor", "glioma", "meningioma", "pituitary"]
 IMG_SIZE = (224, 224)
-
 THRESHOLD = 0.20
 MIN_CONFIDENCE = 0.40
 
@@ -29,8 +27,9 @@ print("✔ Modelo Tumores cargado correctamente.\n")
 # FUNCIONES
 # ============================
 def preprocess_image(img_path):
-    img = image.load_img(img_path, target_size=IMG_SIZE)
-    img_array = image.img_to_array(img).astype("float32") / 255.0
+    img = Image.open(img_path).convert("RGB")
+    img = img.resize(IMG_SIZE)
+    img_array = np.array(img).astype("float32") / 255.0
     return np.expand_dims(img_array, 0)
 
 def predict_tumor(img_path):
