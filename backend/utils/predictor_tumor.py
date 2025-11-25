@@ -1,17 +1,14 @@
 import numpy as np
+import onnxruntime as ort
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras.models import load_model
 import os
-from urllib.request import urlretrieve
 
 # ============================
 # CONFIGURACIÓN MODELO
 # ============================
-MODEL_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../models")
-os.makedirs(MODEL_FOLDER, exist_ok=True)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "../models/tumor_xray_model_efficientnet.onnx")
 
-MODEL_PATH = os.path.join(MODEL_FOLDER, "tumor_xray_model_efficientnet.keras")
-MODEL_URL = "https://huggingface.co/angeljeremias/lungs_xray_model/resolve/main/tumor_xray_model_efficientnet.keras"
 
 CLASS_NAMES = ["notumor", "glioma", "meningioma", "pituitary"]
 IMG_SIZE = (224, 224)
@@ -19,15 +16,13 @@ IMG_SIZE = (224, 224)
 THRESHOLD = 0.20
 MIN_CONFIDENCE = 0.40
 
-# Descargar modelo si no existe
+# Verificar modelo
 if not os.path.exists(MODEL_PATH):
-    print("Descargando modelo Brain MRI desde Hugging Face...")
-    urlretrieve(MODEL_URL, MODEL_PATH)
-    print("✔ Modelo Brain MRI descargado correctamente.")
+    raise FileNotFoundError(f"❌ Modelo no encontrado en: {MODEL_PATH}")
 
 # Cargar modelo
-print("🔁 Cargando modelo Tumores Brain MRI...")
-model = load_model(MODEL_PATH)
+print("🔁 Cargando modelo ONNX Tumores Brain MRI...")
+session = ort.InferenceSession(MODEL_PATH)
 print("✔ Modelo Tumores cargado correctamente.\n")
 
 # ============================
@@ -35,12 +30,14 @@ print("✔ Modelo Tumores cargado correctamente.\n")
 # ============================
 def preprocess_image(img_path):
     img = image.load_img(img_path, target_size=IMG_SIZE)
-    img_array = image.img_to_array(img) / 255.0
-    return np.expand_dims(img_array, axis=0)
+    img_array = image.img_to_array(img).astype("float32") / 255.0
+    return np.expand_dims(img_array, 0)
 
 def predict_tumor(img_path):
     x = preprocess_image(img_path)
-    preds = model.predict(x)[0]
+    input_name = session.get_inputs()[0].name
+    output_name = session.get_outputs()[0].name
+    preds = session.run([output_name], {input_name: x})[0][0]
 
     max_idx = np.argmax(preds)
     max_prob = preds[max_idx]

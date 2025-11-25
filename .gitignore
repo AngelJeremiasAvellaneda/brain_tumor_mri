@@ -19,9 +19,13 @@ venv/
 .idea/
 .DS_Store
 
-# Carpeta de modelos y uploads
-backend/models/
+# Carpeta de uploads (no subir imágenes temporales)
 backend/uploads/
+
+# Mantener solo los modelos ONNX
+# Ignorar otros modelos pesados
+backend/models/
+!backend/models/*.onnx
 
 # No subir datos de entrenamiento ni base de datos local
 database/
