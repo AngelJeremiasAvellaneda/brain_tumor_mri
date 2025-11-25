@@ -1,16 +1,97 @@
-# React + Vite
+# Brain Tumor & Pulmonary Disease Detection AI – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Autor:** Angel Jeremías Avellaneda
 
-Currently, two official plugins are available:
+Este frontend en **React** sirve como interfaz de usuario para la detección de **tumores cerebrales** y **enfermedades crónicas pulmonares** usando imágenes médicas (MRI y radiografías de tórax). Se comunica con el backend mediante API REST para enviar imágenes y recibir resultados de predicción.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🔹 Tecnologías utilizadas
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+* React 19
+* React Router DOM 7
+* Axios (para comunicación con el backend)
+* TailwindCSS (estilos responsivos y modernos)
+* Vite (bundler y servidor de desarrollo)
+* @tensorflow/tfjs (para posibles predicciones en frontend si se requiere)
+* MUI Icons y Lucide React (iconografía y elementos UI)
+* PostCSS, Autoprefixer (procesamiento CSS)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔹 Estructura del frontend
+
+```
+frontend/
+├─ node_modules/                  # Dependencias de NPM
+├─ public/                        # Archivos estáticos (imágenes, SVG, favicon, etc.)
+│  ├─ brain-card.jpg / brain-card-dark.jpg
+│  ├─ card-brain.jpg / card-brain-dark.png
+│  ├─ chart-mri.jpg / chart-mri-dark.webp
+│  ├─ deep-card.jpg / deep-card-dark.jpg
+│  ├─ lungs-card.jpg / lungs-card-dark.jpg
+│  └─ vite.svg
+├─ src/
+│  ├─ api/
+│  │  └─ axiosClient.js           # Configuración de Axios para llamadas al backend
+│  ├─ assets/                     # Recursos estáticos (ej. react.svg)
+│  ├─ components/                 # Componentes reutilizables
+│  │  ├─ DarkModeToggle.jsx
+│  │  ├─ EvaluationSection.jsx
+│  │  ├─ Loader.jsx
+│  │  ├─ Navbar.jsx
+│  │  ├─ Recommendations.jsx
+│  │  ├─ ResultCard.jsx
+│  │  └─ UploadForm.jsx
+│  ├─ pages/                      # Páginas principales
+│  │  ├─ About.jsx
+│  │  ├─ EvaluacionPulmones.jsx
+│  │  ├─ EvaluacionTumores.jsx
+│  │  ├─ Historial.jsx
+│  │  ├─ Home.jsx
+│  │  └─ IAInfo.jsx
+│  ├─ utils/                      # Funciones auxiliares
+│  ├─ App.jsx                      # Componente principal y rutas
+│  ├─ index.css                    # Estilos globales
+│  └─ main.jsx                     # Entrada de la aplicación
+├─ .gitignore
+├─ package.json
+├─ package-lock.json
+├─ postcss.config.js
+├─ tailwind.config.js
+├─ vite.config.js
+└─ README.md
+```
+
+---
+
+## 🔹 Funcionamiento
+
+1. Los usuarios pueden subir imágenes médicas (MRI o radiografía de tórax) mediante `UploadForm`.
+2. La imagen se envía al backend usando Axios (`axiosClient.js`).
+3. El backend procesa la imagen y devuelve el resultado de la predicción.
+4. Los componentes `ResultCard` y `Recommendations` muestran visualmente el resultado.
+5. `DarkModeToggle` permite alternar entre modo claro y oscuro para la interfaz.
+
+**Nota:** Las imágenes de prueba se encuentran en `public/` y los componentes son reutilizables para facilitar la escalabilidad del proyecto.
+
+---
+
+## 🔹 Ejecución del proyecto
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+La aplicación quedará disponible en `http://localhost:5173` (Vite por defecto).
+
+---
+
+## 🔹 Observaciones
+
+* Se utiliza **TailwindCSS** para un diseño moderno y responsive.
+* La estructura modular de componentes permite añadir nuevas funcionalidades fácilmente.
+* `axiosClient.js` centraliza la configuración de llamadas al backend.
+* `UploadForm.jsx` es el componente clave para la interacción con el usuario y la carga de imágenes médicas.

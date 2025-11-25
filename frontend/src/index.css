@@ -2,5 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 body {
-  @apply bg-[#0A1320] text-gray-300;
+  @apply bg-[#0A1320];
+}
+.mask-left {
+  mask-image: linear-gradient(to right, transparent 10%, black 90%);
+  -webkit-mask-image: linear-gradient(to right, transparent 10%, black 50%);
+}
+@layer utilities {
+  .clip-path-custom {
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fade-in .6s ease-out both; }
+.animate-fade-in { animation: fade-in .8s ease-out both; }
+
+/* Línea animada en hover y activa */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #1F7AA8, #58C4FF);
+  transition: width 0.35s ease;
+}
+
+.link-underline-active::after,
+.link-underline:hover::after {
+  width: 100%;
 }

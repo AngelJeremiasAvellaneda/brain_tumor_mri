@@ -1,0 +1,68 @@
+# =========================
+# Python / Backend
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+env/
+venv/
+*.env
+*.venv
+
+# Logs
+*.log
+*.sqlite3
+
+# Editor / IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Carpeta de modelos y uploads opcional
+# Si quieres subir solo los modelos usados, ignora los demás modelos
+backend/models/*
+!backend/models/lungs_xray_model.h5
+!backend/models/tumor_xray_model_efficientnet.keras
+backend/uploads/
+
+# Utils y app.py se suben
+# database y training NO se suben
+database/
+training/
+
+# Otros
+*.bak
+*.swp
+
+# =========================
+# Node / Frontend
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vercel/
+frontend/*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor / IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos de configuración y entorno
+frontend/.env
+backend/.env

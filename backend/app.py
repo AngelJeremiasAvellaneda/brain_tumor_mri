@@ -1,34 +1,82 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import os
-from utils.predictor import predict_tumor
+import uuid
+import uvicorn 
 
-app = Flask(__name__)
-CORS(app)
+from utils.predictor_tumor import predict_tumor
+from utils.predictor_lungs import predict_lungs
 
-UPLOAD_FOLDER = "uploads"
+# ============================
+# CONFIGURAR APP FASTAPI
+# ============================
+app = FastAPI(
+    title="API IA Radiografías y MRI",
+    description="API para detección de tumores cerebrales y enfermedades pulmonares usando IA",
+    version="1.0.0"
+)
+
+# CORS (Permitir peticiones desde React)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Carpeta para subir imágenes
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route("/")
+# ============================
+# RUTAS
+# ============================
+
+@app.get("/")
 def home():
-    return {"message": "API de detección de tumores funcionando ✔"}
+    return {"message": "API de IA funcionando correctamente ✔"}
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    if "image" not in request.files:
-        return jsonify({"error": "No se envió una imagen"}), 400
+# ----------- TUMOR CEREBRAL -------------
+@app.post("/predict/tumor")
+async def detect_brain_tumor(image: UploadFile = File(...)):
+    try:
+        # Crear un nombre único para la imagen
+        unique_filename = f"{uuid.uuid4().hex}_{image.filename}"
+        file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+        
+        # Guardar archivo
+        with open(file_path, "wb") as f:
+            f.write(await image.read())
 
-    file = request.files["image"]
+        # Predecir usando el modelo
+        result = predict_tumor(file_path)
 
-    if file.filename == "":
-        return jsonify({"error": "Nombre de archivo vacío"}), 400
+        return {"filename": unique_filename, "result": result}
 
-    save_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(save_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en predicción de tumor: {str(e)}")
 
-    result = predict_tumor(save_path)
+# ----------- RADIOGRAFÍA PULMONAR -------------
+@app.post("/predict/lungs")
+async def detect_lungs(image: UploadFile = File(...)):
+    try:
+        unique_filename = f"{uuid.uuid4().hex}_{image.filename}"
+        file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+        
+        with open(file_path, "wb") as f:
+            f.write(await image.read())
 
-    return jsonify(result)
+        result = predict_lungs(file_path)
 
+        return {"filename": unique_filename, "result": result}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error en predicción pulmonar: {str(e)}")
+
+# ============================
+# EJECUTAR DIRECTAMENTE CON PYTHON
+# ============================
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True)
