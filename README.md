@@ -1,7 +1,3 @@
-¡Perfecto! Con toda la información que me diste, puedo armar un **README completo para tu proyecto “Brain Tumor & Pulmonary Disease Detection AI”**, combinando backend y frontend, con tu autoría y detalles de tecnologías y estructura.
-
----
-
 # Brain Tumor & Pulmonary Disease Detection AI
 
 **Autor:** Angel Jeremías Avellaneda
@@ -123,9 +119,3 @@ npm run dev
 **Angel Jeremías Avellaneda**
 
 Proyecto desarrollado como prueba y demostración de **detección de tumores cerebrales y enfermedades pulmonares mediante inteligencia artificial**.
-
----
-
-Si quieres, puedo además hacer **una versión más “GitHub friendly”**, con badges de dependencias, Python y Node, e instrucciones de instalación resumidas para que quede listo para subir al repositorio.
-
-¿Quieres que haga esa versión también?
